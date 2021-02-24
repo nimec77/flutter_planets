@@ -1,0 +1,49 @@
+{"frames": [
+
+{
+	"filename": "star_0.png",
+	"frame": {"x":1,"y":1,"w":50,"h":50},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":50},
+	"sourceSize": {"w":50,"h":50},
+	"pivot": {"x":0.5,"y":0.5}
+
+},
+{
+	"filename": "star_1.png",
+	"frame": {"x":151,"y":1,"w":48,"h":48},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":48},
+	"sourceSize": {"w":48,"h":48},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "star_2.png",
+	"frame": {"x":53,"y":1,"w":48,"h":50},
+	"rotated": false,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":48,"h":50},
+	"sourceSize": {"w":48,"h":50},
+	"pivot": {"x":0.5,"y":0.5}
+},
+{
+	"filename": "star_3.png",
+	"frame": {"x":103,"y":1,"w":50,"h":46},
+	"rotated": true,
+	"trimmed": false,
+	"spriteSourceSize": {"x":0,"y":0,"w":50,"h":46},
+	"sourceSize": {"w":50,"h":46},
+	"pivot": {"x":0.5,"y":0.5}
+}],
+"meta": {
+	"app": "https://www.codeandweb.com/texturepacker",
+	"version": "1.0",
+	"image": "sprites.png",
+	"format": "RGBA8888",
+	"size": {"w":200,"h":52},
+	"scale": "1",
+	"smartupdate": "$TexturePacker:SmartUpdate:a2b2f4d260029ccea0dad3ae310c31d8:13aed2c6dcbda80588cb4bd515c3408d:1eabdf11f75e3a4fe3147baf7b5be24b$"
+}
+}
