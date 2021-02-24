@@ -30,7 +30,7 @@ class GetListPlanetsWithRequired {
           if (randomPlanets.contains(planet)) {
             randomPlanets[randomInt(kPlanetsListSize)] = planet;
           }
-          return null;
+          return randomPlanets;
         });
       },
     );
