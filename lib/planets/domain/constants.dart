@@ -1,0 +1,1 @@
+const kPlanetsListSize = 6;

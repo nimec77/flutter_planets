@@ -14,7 +14,7 @@ class MyApp extends StatelessWidget {
       ),
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Планеты солнечной системы'),
+          title: const Text('Планеты солнечной системы'),
         ),
         body: Center(
           child: Text(
