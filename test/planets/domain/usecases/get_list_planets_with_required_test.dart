@@ -26,45 +26,68 @@ void main() {
     fakePlanetRepository = FakePlanetRepository(planetProvider: fakePlanetProvider);
   });
 
-  test('should give the wrong length to get a list of planet', () async {
-    when(mockPlanetRepository.getPlanets()).thenAnswer((_) async => const Left(PlanetFailure.wrongLength()));
-    when(mockPlanetRepository.getPlanetByPlanetId(any)).thenAnswer((_) async => const Left(PlanetFailure.notFound()));
+  group('getListPlanetsWithRequired', () {
+    test('should give the wrong length to get a list of planet', () async {
+      when(mockPlanetRepository.getPlanets()).thenAnswer((_) async => const Left(PlanetFailure.wrongLength()));
+      when(mockPlanetRepository.getPlanetByPlanetId(any)).thenAnswer((_) async => const Left(PlanetFailure.notFound()));
 
-    final result = await getListPlanetsWithRequired(PlanetId.saturn);
+      final result = await getListPlanetsWithRequired(PlanetId.saturn);
 
-    expect(result, const Left(PlanetFailure.wrongLength()));
-    verify(mockPlanetRepository.getPlanets());
-    verifyNoMoreInteractions(mockPlanetRepository);
-  });
+      expect(result, const Left(PlanetFailure.wrongLength()));
+      verify(mockPlanetRepository.getPlanets());
+      verifyNoMoreInteractions(mockPlanetRepository);
+    });
 
-  test('should issue not found to receive planet', () async {
-    when(mockPlanetRepository.getPlanets())
-        .thenAnswer((_) async => Right(List.generate(kPlanetsListSize, (_) => const Planet.empty())));
-    when(mockPlanetRepository.getPlanetByPlanetId(any)).thenAnswer((_) async => const Left(PlanetFailure.notFound()));
+    test('should issue not found to receive planet', () async {
+      when(mockPlanetRepository.getPlanets())
+          .thenAnswer((_) async => Right(List.generate(kPlanetsListSize, (_) => const Planet.empty())));
+      when(mockPlanetRepository.getPlanetByPlanetId(any)).thenAnswer((_) async => const Left(PlanetFailure.notFound()));
 
-    final result = await getListPlanetsWithRequired(PlanetId.saturn);
+      final result = await getListPlanetsWithRequired(PlanetId.saturn);
 
-    expect(result, const Left(PlanetFailure.notFound()));
-    verify(mockPlanetRepository.getPlanets());
-    verify(mockPlanetRepository.getPlanetByPlanetId(any));
-    verifyNoMoreInteractions(mockPlanetRepository);
-  });
+      expect(result, const Left(PlanetFailure.notFound()));
+      verify(mockPlanetRepository.getPlanets());
+      verify(mockPlanetRepository.getPlanetByPlanetId(any));
+      verifyNoMoreInteractions(mockPlanetRepository);
+    });
 
-  test('should give a random list of planets with required', () async {
-    final eitherPlanets = fakePlanetRepository.getPlanets();
-    final eitherSaturn = fakePlanetRepository.getPlanetByPlanetId(PlanetId.saturn);
-    when(mockPlanetRepository.getPlanets()).thenAnswer((_) async => eitherPlanets);
-    when(mockPlanetRepository.getPlanetByPlanetId(PlanetId.saturn)).thenAnswer((_) async => eitherSaturn);
+    test('should give type of Right', () async {
+      final eitherPlanets = fakePlanetRepository.getPlanets();
+      final eitherSaturn = fakePlanetRepository.getPlanetByPlanetId(PlanetId.saturn);
+      when(mockPlanetRepository.getPlanets()).thenAnswer((_) async => eitherPlanets);
+      when(mockPlanetRepository.getPlanetByPlanetId(PlanetId.saturn)).thenAnswer((_) async => eitherSaturn);
+      final result = await getListPlanetsWithRequired(PlanetId.saturn);
+      expect(result, isA<Right>());
+      verify(mockPlanetRepository.getPlanets());
+      verify(mockPlanetRepository.getPlanetByPlanetId(PlanetId.saturn));
+      verifyNoMoreInteractions(mockPlanetRepository);
+    });
 
-    final result = await getListPlanetsWithRequired(PlanetId.saturn);
+    test('should contain the requested planet', () async {
+      final eitherPlanets = fakePlanetRepository.getPlanets();
+      final eitherSaturn = fakePlanetRepository.getPlanetByPlanetId(PlanetId.saturn);
+      when(mockPlanetRepository.getPlanets()).thenAnswer((_) async => eitherPlanets);
+      when(mockPlanetRepository.getPlanetByPlanetId(PlanetId.saturn)).thenAnswer((_) async => eitherSaturn);
+      final result = await getListPlanetsWithRequired(PlanetId.saturn);
+      final resultPlanets = result | [];
+      final saturn = await fakePlanetProvider.getPlanetByPlanetId(PlanetId.saturn);
+      expect(resultPlanets, anyElement(saturn));
+      verify(mockPlanetRepository.getPlanets());
+      verify(mockPlanetRepository.getPlanetByPlanetId(PlanetId.saturn));
+      verifyNoMoreInteractions(mockPlanetRepository);
+    });
 
-    expect(result, isA<Right>());
-    final resultPlanets = result | [];
-    final saturn = await fakePlanetProvider.getPlanetByPlanetId(PlanetId.saturn);
-    expect(resultPlanets, anyElement(saturn));
-    expect(resultPlanets, orderedEquals(Set.from(resultPlanets)));
-    verify(mockPlanetRepository.getPlanets());
-    verify(mockPlanetRepository.getPlanetByPlanetId(PlanetId.saturn));
-    verifyNoMoreInteractions(mockPlanetRepository);
+    test('should planets not repeat', () async {
+      final eitherPlanets = fakePlanetRepository.getPlanets();
+      final eitherSaturn = fakePlanetRepository.getPlanetByPlanetId(PlanetId.saturn);
+      when(mockPlanetRepository.getPlanets()).thenAnswer((_) async => eitherPlanets);
+      when(mockPlanetRepository.getPlanetByPlanetId(PlanetId.saturn)).thenAnswer((_) async => eitherSaturn);
+      final result = await getListPlanetsWithRequired(PlanetId.saturn);
+      final resultPlanets = result | [];
+      expect(resultPlanets, orderedEquals(Set.from(resultPlanets)));
+      verify(mockPlanetRepository.getPlanets());
+      verify(mockPlanetRepository.getPlanetByPlanetId(PlanetId.saturn));
+      verifyNoMoreInteractions(mockPlanetRepository);
+    });
   });
 }
